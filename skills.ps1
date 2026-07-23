@@ -40,6 +40,11 @@ if ($Push) {
   Get-ChildItem $skills -Directory | Where-Object { Has-Skill $_.FullName } | ForEach-Object {
     Copy-Item $_.FullName -Destination $repo -Recurse -Force; $n++
   }
+  # enlever les .git imbriques (un skill peut etre lui-meme un repo) sinon git
+  # les ajoute comme "repos embarques" vides -> l'autre PC ne les recupere pas.
+  Get-ChildItem $repo -Recurse -Force -Directory -Filter '.git' -EA SilentlyContinue |
+    Where-Object { $_.FullName -ne (Join-Path $repo '.git') } |
+    ForEach-Object { Remove-Item -Recurse -Force $_.FullName }
   Push-Location $repo
   git add -A | Out-Null
   git commit -q -m ("skills snapshot depuis {0} ({1} skills)" -f $env:COMPUTERNAME, $n) 2>$null | Out-Null

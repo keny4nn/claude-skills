@@ -5,7 +5,7 @@ description: Boîte à outils IA VÉRIFIÉE issue de la veille de l'utilisateur 
 
 # Veille — Boîte à outils IA (vérifiée)
 
-Référence vivante. Source : `LOG/_brain/Veille/Ressources.md`. Tous les liens sont vérifiés (pas d'invention).
+Référence vivante. Source : `Desktop/HUB/Veille/Ressources.md` (le cerveau de veille de HUB, au-dessus des 6 projets). Tous les liens sont vérifiés (pas d'invention).
 
 ## 1. Économie de tokens / contexte
 - **`AGENTS.md` lean** — https://github.com/ai-driven-dev/framework (`plugins/aidd-context/skills/02-project-memory/assets/AGENTS.md`).
