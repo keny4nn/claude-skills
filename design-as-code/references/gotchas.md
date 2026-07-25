@@ -203,7 +203,24 @@ dépôt, jamais à la version de travail.
   se règle sur la largeur de page. En 4K source, laisser compresser à l'export.
 - **Couleur** : Chrome sort du RGB. Pour l'offset sérieux, la conversion CMJN se fait
   chez l'imprimeur (le noter dans une fiche imprimeur) ; les tons directs fluo ne se
-  simulent pas en RGB — l'assumer et le documenter.
+  simulent pas en RGB — l'assumer et le documenter. **Tout ton direct (Pantone/fluo)
+  doit avoir son substitut CMJN documenté dans la charte** (exigé par un jury pro :
+  sans lui, la pièce n'est pas imprimable en quadri standard).
 - **Typo FR** : espaces insécables avant `: ; ! ? %`, guillemets « », apostrophe
   typographique. (Interdits spécifiques au client — ex. tirets cadratins — à vérifier
   par grep sur le CONTENU RENDU, pas les commentaires.)
+
+### Règles d'identité issues d'un retour de jury réel (19/20, les points retirés = ceux-ci)
+- **Maximum 3 typographies** dans une identité — au-delà, « le client/utilisateur
+  visuel s'y perd ». Compter TOUTES les familles, y compris la mono de service.
+- Planche typographie d'une charte : indiquer **le créateur/la fonderie ET le prix
+  (ou la licence) de chaque police**. Vérifiable — ne jamais inventer un prix (cf. le
+  pilier « aucun chiffre non sourcé ») : « licence payante » suffit si le tarif n'est
+  pas public.
+- **Logo : tester la lisibilité de la baseline à taille réelle** d'usage, et vérifier
+  l'équilibre horizontal du lockup (un déséquilibre se voit en jury avant tout le reste).
+- **Formats éditoriaux : sobre par défaut.** Un leaflet/flyer « trop grand » est le
+  reproche unanime le plus facile à éviter — en cas de doute, prendre le format
+  standard en dessous.
+- **Affiche : hiérarchiser les niveaux de lecture** (1 message à 5 m, 1 à 2 m, 1 à
+  bout de bras) et le vérifier sur le PNG de contrôle réduit à 10 % (simulation vue de loin).
