@@ -62,10 +62,11 @@ vérifié PAR CODE.
 3. **Build** : copier `scripts/build.py` dans `<livrable>/_tools/`, adapter le bloc
    CONFIG (`CHROME` si non détecté, `HTML`, `OUT_NAME`, `MAXW`, `BOOKMARKS=False`
    pour un mono-page). Il enchaîne : vérif des stylesheets → garde anti-PDF-verrouillé
-   → Chrome (`--virtual-time-budget` obligatoire) → compression pattern-safe 2 passes
-   → signets → PNG de contrôle. Ne pas retirer les garde-fous : chacun répond à un
-   incident vécu (build fantôme « OK » sur fichier verrouillé, polices corrompues par
-   un save unique, images/CSS manquants aléatoirement, href cassé silencieux).
+   → suppression de la cible → Chrome (`--virtual-time-budget` obligatoire) → exige un
+   PDF neuf (mtime) → compression pattern-safe 2 passes → signets → PNG de contrôle.
+   Ne pas retirer les garde-fous : chacun répond à un incident vécu (build fantôme
+   « OK » sur fichier verrouillé ou jamais réécrit, polices corrompues par un save
+   unique, images/CSS manquants aléatoirement, href cassé silencieux).
 
 4. **Vérifier — TOUJOURS avant de livrer** :
    ```bash

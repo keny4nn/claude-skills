@@ -13,6 +13,7 @@ Détail des pièges : references/gotchas.md du skill design-as-code.
 import re
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 # ── CONFIG (seule zone à adapter) ────────────────────────────────────────────
@@ -88,6 +89,13 @@ def verifie_ressources(html: Path):
 def render(chrome: str, html: Path, pdf: Path):
     """HTML -> PDF. --virtual-time-budget est OBLIGATOIRE : sans lui Chrome
     imprime avant la fin du chargement (webfonts/images absentes, aléatoire)."""
+    # Garde anti-build-fantôme n°2 (vécu sur le moodboard FZN, 29/09/2026) : Chrome a laissé
+    # l'ANCIEN PDF en place sans erreur, verifie_ecriture n'a rien vu, et le script affichait
+    # « OK » en lisant la taille du vieux fichier. On supprime la cible avant, on exige un
+    # fichier neuf après (cf. gotchas §4a-bis).
+    t0 = time.time()
+    if pdf.exists():
+        pdf.unlink()
     try:
         subprocess.run([chrome, "--headless=new", "--disable-gpu",
                         f"--virtual-time-budget={VIRTUAL_TIME_MS}",
@@ -97,6 +105,8 @@ def render(chrome: str, html: Path, pdf: Path):
     except subprocess.CalledProcessError as e:
         sys.stderr.write(e.stderr.decode(errors="replace") if e.stderr else "")
         raise SystemExit(f"[X] Chrome a échoué (code {e.returncode}) — stderr ci-dessus.")
+    if not pdf.exists() or pdf.stat().st_mtime < t0 - 1:
+        raise SystemExit(f"[X] Chrome n'a pas écrit {pdf.name} : aucun PDF neuf. Build refusé.")
     print("OK", pdf.name, f"({pdf.stat().st_size // 1024} Ko)")
 
 

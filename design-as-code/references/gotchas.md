@@ -141,6 +141,17 @@ affiche « OK » en lisant l'ANCIEN fichier → des heures de corrections invisi
 dépôt figé à une vieille version (vécu). `build.py` refuse de démarrer si la cible est
 verrouillée et échoue BRUYAMMENT si la compression ne peut pas écrire.
 
+### 4a-bis. PDF jamais réécrit = build fantôme n°2 (le garde 4a ne le voit pas)
+Vécu sur le moodboard FZN (29/09/2026) : `--print-to-pdf` n'a PAS remplacé le PDF
+existant, Chrome est sorti sans erreur, le test `open(pdf, "r+b")` de 4a est passé, et
+`build.py` affichait « OK <nom>.pdf » en lisant la taille de l'ANCIEN fichier. Plusieurs
+rebuilds « réussis », PDF figé à une vieille version ; repéré seulement en comparant les
+mtimes. Cause exacte côté Chrome non élucidée — d'où un garde sur le RÉSULTAT, pas sur
+une hypothèse. → Remède (dans `render()`) : noter `t0`, **supprimer la cible avant**
+d'appeler Chrome, puis refuser le build si le PDF est absent ou si `mtime < t0 - 1`.
+Règle générale : un « OK » ne se déduit jamais de l'existence du fichier de sortie,
+seulement d'une preuve qu'il est NEUF.
+
 ### 4b. Console cp1252
 `print()` d'un ✓/emoji plante les scripts (`UnicodeEncodeError`). En tête de tout
 script : `sys.stdout.reconfigure(encoding="utf-8")` ; éviter les emojis dans les logs.
@@ -209,6 +220,16 @@ dépôt, jamais à la version de travail.
 - **Typo FR** : espaces insécables avant `: ; ! ? %`, guillemets « », apostrophe
   typographique. (Interdits spécifiques au client — ex. tirets cadratins — à vérifier
   par grep sur le CONTENU RENDU, pas les commentaires.)
+- **Typo FR par code : JAMAIS sur du CSS ni une URL.** Vécu sur le moodboard FZN
+  (29/09/2026) : la passe « insécable avant `:` » tournait sur les VALEURS du JSON de
+  contenu AVANT le gabarit. Le champ `pos` (`object-position:42% 40%`), injecté ensuite
+  dans `style=""`, est devenu `object-position :42% 40%` (NBSP) → déclaration invalide,
+  ignorée SANS erreur : tous les recadrages d'image tombés d'un coup. Sauter les balises
+  (`<…>`) ne suffit pas, puisque le CSS n'est pas encore dans une balise au moment de la
+  passe. Même mécanisme pour tout `src`/`href` (`https://` → `https :`).
+  → Remède : exclure explicitement de la passe typo les champs destinés à `style`/`src`/
+  `href` (liste de clés, comme `applique()` dans FZN `outils/fabrique.py`) ; et contrôler
+  le HTML RENDU : aucun U+00A0 dans un attribut `style="…"`, `src="…"` ou `href="…"`.
 
 ### Règles d'identité issues d'un retour de jury réel (19/20, les points retirés = ceux-ci)
 - **Maximum 3 typographies** dans une identité — au-delà, « le client/utilisateur
